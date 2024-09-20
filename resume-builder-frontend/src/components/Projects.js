@@ -1,7 +1,33 @@
 import React from "react";
-import { FaRocket, FaPlus } from "react-icons/fa";
+import { FaRocket, FaPlus, FaTrash } from "react-icons/fa";
 
-const Projects = ({ projects, addProject, removeProject }) => {
+const Projects = ({ projects, setProjects }) => {
+  // Remove a project by index
+  const removeProject = (index) => {
+    const newProjects = projects.filter((_, i) => i !== index);
+    setProjects(newProjects);
+  };
+
+  // Add a new project entry
+  const addProject = () => {
+    setProjects([
+      ...projects,
+      {
+        name: "",
+        description: "",
+        github: "",
+        liveLink: "",
+      },
+    ]);
+  };
+
+  // Update the project state when an input field changes
+  const handleInputChange = (index, field, value) => {
+    const newProjects = [...projects];
+    newProjects[index][field] = value;
+    setProjects(newProjects);
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-semibold text-purple-700 mb-4 flex items-center">
@@ -23,6 +49,10 @@ const Projects = ({ projects, addProject, removeProject }) => {
                 id={`project-name-${index}`}
                 className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
                 placeholder="Project Name"
+                value={project.name} // Bind value to state
+                onChange={(e) =>
+                  handleInputChange(index, "name", e.target.value)
+                } // Handle input change
               />
             </div>
             <div className="md:col-span-2">
@@ -35,7 +65,12 @@ const Projects = ({ projects, addProject, removeProject }) => {
                 id={`project-description-${index}`}
                 rows="3"
                 className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
-                placeholder="Brief description of your project"></textarea>
+                placeholder="Brief description of your project"
+                value={project.description} // Bind value to state
+                onChange={(e) =>
+                  handleInputChange(index, "description", e.target.value)
+                } // Handle input change
+              ></textarea>
             </div>
             <div>
               <label
@@ -48,6 +83,10 @@ const Projects = ({ projects, addProject, removeProject }) => {
                 id={`project-github-${index}`}
                 className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
                 placeholder="https://github.com/..."
+                value={project.github} // Bind value to state
+                onChange={(e) =>
+                  handleInputChange(index, "github", e.target.value)
+                } // Handle input change
               />
             </div>
             <div>
@@ -61,11 +100,20 @@ const Projects = ({ projects, addProject, removeProject }) => {
                 id={`project-live-${index}`}
                 className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
                 placeholder="https://..."
+                value={project.liveLink} // Bind value to state
+                onChange={(e) =>
+                  handleInputChange(index, "liveLink", e.target.value)
+                } // Handle input change
               />
             </div>
           </div>
           {index > 0 && (
-            <button onClick={() => removeProject(index)}>Remove</button>
+            <button
+              type="button"
+              onClick={() => removeProject(index)}
+              className="mt-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+              <FaTrash className="mr-2" /> Remove
+            </button>
           )}
         </div>
       ))}

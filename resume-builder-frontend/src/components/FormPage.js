@@ -6,11 +6,14 @@ import Experience from "./Experience";
 import Projects from "./Projects";
 import Skills from "./Skills";
 import { FaChevronLeft, FaChevronRight, FaSignOutAlt } from "react-icons/fa";
+import ResumePDF from "./ResumePDF";
+import { PDFViewer } from "@react-pdf/renderer";
 
 function FormPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [activeTab, setActiveTab] = useState("personal");
+  const [resumeData, setResumeData] = useState(null);
 
   //    States for each section
   const [educations, setEducations] = useState([
@@ -25,6 +28,16 @@ function FormPage() {
   const removeEducation = (index) => {
     setEducations(educations.filter((_, i) => i !== index));
   };
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    location: "",
+    linkedin: "",
+    github: "",
+    website: "",
+    blog: "",
+  });
   const [experiences, setExperiences] = useState([
     {
       company: "",
@@ -35,11 +48,14 @@ function FormPage() {
       currentlyWorking: false,
     },
   ]);
+  console.log("Experience: ", experiences);
+
   const [projects, setProjects] = useState([
     { name: "", description: "", githubLink: "", liveLink: "" },
   ]);
 
   const tabs = ["personal", "education", "experience", "projects", "skills"];
+  const [skills, setSkills] = useState("");
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     setUsername(storedUsername);
@@ -69,7 +85,29 @@ function FormPage() {
   };
 
   const handleGenerateResume = () => {
-    console.log("Generating Resume...");
+    const data = {
+      personalDetails: {
+        name: formData.name,
+        phone: formData.phone,
+        location: formData.location,
+        email: formData.email,
+        githubLink: formData.githubLink,
+        linkedinLink: formData.linkedinLink,
+        website: formData.website,
+      },
+      education: educations,
+      projects: projects,
+      skills: skills.split(",").map((skill) => skill.trim()),
+      experiences: experiences.map((exp) => ({
+        company: exp.company,
+        position: exp.designation,
+        dates: `${exp.startDate} - ${exp.endDate}`,
+        description: exp.tasks || [], // Adjust based on how you store tasks
+      })),
+    };
+
+    setResumeData(data);
+    console.log("Generating Resume...", data);
   };
 
   return (
@@ -111,11 +149,16 @@ function FormPage() {
             ))}
           </div>
           <div className="mb-4 ml-4 mr-4">
-            {activeTab === "personal" && <PersonalDetails />}
+            {activeTab === "personal" && (
+              <PersonalDetails
+                formData={formData}
+                setFormData={setFormData}
+              />
+            )}
             {activeTab === "education" && (
               <Education
                 educations={educations}
-                setEducations={setEducations}
+                setEducations={setEducations} // Pass the correct setter function
                 addEducation={addEducation}
                 removeEducation={removeEducation}
               />
@@ -132,7 +175,19 @@ function FormPage() {
                 setProjects={setProjects}
               />
             )}
-            {activeTab === "skills" && <Skills />}
+            {activeTab === "skills" && (
+              <Skills
+                skills={skills}
+                setSkills={setSkills}
+              />
+            )}
+            {resumeData && (
+              <PDFViewer
+                width="100%"
+                height="600">
+                <ResumePDF resumeData={resumeData} />
+              </PDFViewer>
+            )}
           </div>
         </div>
       </main>

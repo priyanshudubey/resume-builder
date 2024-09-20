@@ -19,6 +19,8 @@ const PersonalDetails = ({ formData, setFormData }) => {
             id="name"
             className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
             placeholder="Your Name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </div>
         <div>
@@ -32,6 +34,10 @@ const PersonalDetails = ({ formData, setFormData }) => {
             id="email"
             className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
             placeholder="your.email@example.com"
+            value={formData.email}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
           />
         </div>
         <div>
@@ -45,6 +51,10 @@ const PersonalDetails = ({ formData, setFormData }) => {
             id="phone"
             className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
             placeholder="123-456-7890"
+            value={formData.phone}
+            onChange={(e) =>
+              setFormData({ ...formData, phone: e.target.value })
+            }
           />
         </div>
         <div>
@@ -58,6 +68,10 @@ const PersonalDetails = ({ formData, setFormData }) => {
             id="location"
             className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
             placeholder="City, Country"
+            value={formData.location}
+            onChange={(e) =>
+              setFormData({ ...formData, location: e.target.value })
+            }
           />
         </div>
         <div>
@@ -71,6 +85,10 @@ const PersonalDetails = ({ formData, setFormData }) => {
             id="github"
             className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
             placeholder="https://github.com/yourusername"
+            value={formData.github}
+            onChange={(e) =>
+              setFormData({ ...formData, github: e.target.value })
+            }
           />
         </div>
         <div>
@@ -84,6 +102,10 @@ const PersonalDetails = ({ formData, setFormData }) => {
             id="linkedin"
             className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
             placeholder="https://linkedin.com/in/yourusername"
+            value={formData.linkedin}
+            onChange={(e) =>
+              setFormData({ ...formData, linkedin: e.target.value })
+            }
           />
         </div>
         <div>
@@ -97,6 +119,10 @@ const PersonalDetails = ({ formData, setFormData }) => {
             id="website"
             className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
             placeholder="https://yourwebsite.com"
+            value={formData.website}
+            onChange={(e) =>
+              setFormData({ ...formData, website: e.target.value })
+            }
           />
         </div>
         <div>
@@ -110,6 +136,8 @@ const PersonalDetails = ({ formData, setFormData }) => {
             id="blog"
             className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
             placeholder="https://yourblog.com"
+            value={formData.blog}
+            onChange={(e) => setFormData({ ...formData, blog: e.target.value })}
           />
         </div>
       </div>
