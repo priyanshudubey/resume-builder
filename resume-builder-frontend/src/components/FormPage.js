@@ -14,6 +14,7 @@ function FormPage() {
   const [username, setUsername] = useState("");
   const [activeTab, setActiveTab] = useState("personal");
   const [resumeData, setResumeData] = useState(null);
+  const [showPDF, setShowPDF] = useState(false);
 
   //    States for each section
   const [educations, setEducations] = useState([
@@ -48,7 +49,6 @@ function FormPage() {
       currentlyWorking: false,
     },
   ]);
-  console.log("Experience: ", experiences);
 
   const [projects, setProjects] = useState([
     { name: "", description: "", githubLink: "", liveLink: "" },
@@ -85,31 +85,56 @@ function FormPage() {
   };
 
   const handleGenerateResume = () => {
+    console.log("FormData: ", formData);
+    console.log("Experiences: ", experiences);
+    console.log("Projects: ", projects);
+    console.log("Skills: ", skills);
+    console.log("Education: ", educations);
     const data = {
       personalDetails: {
         name: formData.name,
         phone: formData.phone,
         location: formData.location,
         email: formData.email,
-        githubLink: formData.githubLink,
-        linkedinLink: formData.linkedinLink,
+        githubLink: formData.github,
+        linkedinLink: formData.linkedin,
         website: formData.website,
+        blog: formData.blog,
       },
-      education: educations,
-      projects: projects,
+      education: educations.map((edu) => ({
+        institute: edu.institute,
+        startYear: edu.startYear,
+        endYear: edu.endYear,
+        grade: edu.grade,
+      })),
+      projects: projects.map((proj) => ({
+        name: proj.name,
+        description: proj.description,
+        githubLink: proj.githubLink,
+        liveLink: proj.liveLink,
+      })),
       skills: skills.split(",").map((skill) => skill.trim()),
       experiences: experiences.map((exp) => ({
         company: exp.company,
         position: exp.designation,
         dates: `${exp.startDate} - ${exp.endDate}`,
-        description: exp.tasks || [], // Adjust based on how you store tasks
+        description: Array.isArray(exp.jobRole)
+          ? exp.jobRole
+          : exp.jobRole
+          ? [exp.jobRole]
+          : [],
       })),
     };
 
     setResumeData(data);
+    setShowPDF(true);
     console.log("Generating Resume...", data);
   };
-
+  useEffect(() => {
+    console.log("ResumeData updated:", resumeData);
+    console.log("showPDF:", showPDF);
+  }, [resumeData, showPDF]);
+  //   console.log("Resume Data before PDFViewer:", resumeData);
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-100 to-white">
       <header className="bg-purple-700 text-white py-8">
@@ -181,13 +206,6 @@ function FormPage() {
                 setSkills={setSkills}
               />
             )}
-            {resumeData && (
-              <PDFViewer
-                width="100%"
-                height="600">
-                <ResumePDF resumeData={resumeData} />
-              </PDFViewer>
-            )}
           </div>
         </div>
       </main>
@@ -213,6 +231,23 @@ function FormPage() {
           </button>
         )}
       </div>
+      {console.log("Printing resume Data: ", resumeData)}
+      {showPDF ? (
+        resumeData ? (
+          <>
+            <p>Attempting to display PDF Viewer</p>
+            <PDFViewer
+              width="100%"
+              height="600">
+              <ResumePDF resumeData={resumeData} />
+            </PDFViewer>
+          </>
+        ) : (
+          <p>Resume data is not available yet</p>
+        )
+      ) : (
+        <p>PDF Viewer is not shown yet</p>
+      )}
       <>
         <footer className="bg-purple-800 text-white py-8 mt-16">
           <div className="container mx-auto px-4 text-center">
