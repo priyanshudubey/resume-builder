@@ -9,41 +9,55 @@ import {
   Font,
 } from "@react-pdf/renderer";
 
-// Register custom fonts
+// Register new fonts
 Font.register({
-  family: "Roboto",
-  src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf",
+  family: "Nunito",
+  fonts: [
+    {
+      src: "https://fonts.gstatic.com/s/nunito/v20/XRXV3I6Li01BKofINeaB.woff2",
+      fontWeight: "normal",
+    },
+    {
+      src: "https://fonts.gstatic.com/s/nunito/v20/XRXV3I6Li01BKofINeaB.woff2",
+      fontWeight: "bold",
+    },
+  ],
 });
 
 Font.register({
-  family: "Roboto",
-  src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf",
-  fontWeight: 700,
-});
-
-Font.register({
-  family: "Roboto",
-  src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-light-webfont.ttf",
-  fontWeight: 300,
+  family: "Lato",
+  fonts: [
+    {
+      src: "https://fonts.gstatic.com/s/lato/v17/S6uyw4BMUTPHjxAwXjeu.woff2",
+      fontWeight: "normal",
+    },
+    {
+      src: "https://fonts.gstatic.com/s/lato/v17/S6uyw4BMUTPHjxAwXjeu.woff2",
+      fontWeight: "bold",
+    },
+  ],
 });
 
 const styles = StyleSheet.create({
   page: {
-    padding: 50,
-    fontFamily: "Roboto",
+    backgroundColor: "#ffffff",
+    padding: 30,
     fontSize: 11,
     lineHeight: 1.5,
-  },
-  section: {
-    marginBottom: 20,
+    flexDirection: "column",
   },
   header: {
     marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#cccccc",
+    paddingBottom: 10,
   },
   name: {
-    fontSize: 24,
-    fontWeight: 700,
+    fontSize: 28, // Increased font size for visibility
+    fontFamily: "Lato",
+    fontWeight: "bold",
     marginBottom: 5,
+    color: "#FA1E4E",
   },
   contact: {
     flexDirection: "row",
@@ -52,65 +66,68 @@ const styles = StyleSheet.create({
   },
   contactItem: {
     fontSize: 10,
+    fontFamily: "Lato",
+  },
+  link: {
+    textDecoration: "none",
+    color: "#007acc",
+  },
+  section: {
+    marginBottom: 15,
   },
   sectionTitle: {
     fontSize: 14,
-    fontWeight: 700,
+    fontWeight: "bold",
+    fontFamily: "Lato",
     marginBottom: 5,
-    textTransform: "uppercase",
     borderBottomWidth: 1,
-    borderBottomColor: "#000",
-    paddingBottom: 2,
+    borderBottomColor: "#e43847",
+    paddingBottom: 3,
+    textTransform: "uppercase",
+  },
+  educationRow: {
+    flexDirection: "row",
+    justifyContent: "space-between", // Aligns left and right content
+    marginBottom: 3, // Adjusts spacing between lines
   },
   entryTitle: {
-    fontWeight: 700,
-    marginBottom: 2,
+    fontSize: 12,
+    fontWeight: "bold",
+    fontFamily: "Lato",
   },
   entrySubtitle: {
-    fontWeight: 400,
-    fontStyle: "italic",
-    marginBottom: 2,
+    fontSize: 10,
+    fontFamily: "Lato",
+    color: "#777777",
+    marginBottom: 5,
+  },
+  entryDates: {
+    fontSize: 10,
+    fontFamily: "Lato",
+    color: "#777777",
+  },
+  text: {
+    fontFamily: "Lato",
+    fontSize: 10,
+    marginBottom: 5,
   },
   bulletPoint: {
     flexDirection: "row",
-    marginBottom: 2,
+    marginBottom: 3,
   },
   bullet: {
     width: 10,
+    fontSize: 10,
   },
   bulletContent: {
-    flex: 1,
-  },
-  link: {
-    color: "#000",
-    textDecoration: "none",
+    fontSize: 10,
+    fontFamily: "Lato",
   },
 });
 
 const ResumePDF = ({ resumeData }) => {
-  console.log("ResumePDF received props:", resumeData);
-
-  if (!resumeData || Object.keys(resumeData).length === 0) {
-    console.error("ResumePDF: No data received");
-    return (
-      <Document>
-        <Page
-          size="A4"
-          style={styles.page}>
-          <Text>Error: No resume data available</Text>
-        </Page>
-      </Document>
-    );
-  }
-
-  const { personalDetails, skills, experiences, education } = resumeData;
-
-  console.log("Parsed data in ResumePDF:", {
-    personalDetails,
-    skills,
-    experiences,
-    education,
-  });
+  const { personalDetails, skills, experiences, education, projects } =
+    resumeData || {};
 
   const renderDescription = (description) => {
     if (Array.isArray(description)) {
@@ -132,6 +149,19 @@ const ResumePDF = ({ resumeData }) => {
     }
     return null;
   };
+
+  if (!resumeData) {
+    return (
+      <Document>
+        <Page
+          size="A4"
+          style={styles.page}>
+          <Text>Error: No resume data available</Text>
+        </Page>
+      </Document>
+    );
+  }
+  console.log("Printing name: ", personalDetails.name);
 
   return (
     <Document>
@@ -181,13 +211,19 @@ const ResumePDF = ({ resumeData }) => {
 
         {/* Skills Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Skills</Text>
+          <Text style={styles.sectionTitle}>
+            <Text style={{ color: "#FA1E4E" }}>Ski</Text>
+            <Text>lls</Text>
+          </Text>
           <Text>{skills?.length > 0 ? skills.join(" • ") : "Your Skills"}</Text>
         </View>
 
         {/* Experience Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Professional Experience</Text>
+          <Text style={styles.sectionTitle}>
+            <Text style={{ color: "#FA1E4E" }}>Pro</Text>
+            <Text>fessional Experience</Text>
+          </Text>
           {experiences?.map((exp, index) => (
             <View
               key={index}
@@ -203,18 +239,67 @@ const ResumePDF = ({ resumeData }) => {
           ))}
         </View>
 
-        {/* Education Section */}
+        {/* Projects Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Education</Text>
-          {education?.map((edu, index) => (
+          <Text style={styles.sectionTitle}>
+            <Text style={{ color: "#FA1E4E" }}>Pro</Text>
+            <Text>jects</Text>
+          </Text>
+          {projects?.map((project, index) => (
             <View
               key={index}
-              style={{ marginBottom: 5 }}>
-              <Text style={styles.entryTitle}>{edu.grade || "Degree"}</Text>
-              <Text style={styles.entrySubtitle}>
-                {edu.institute || "Institute"} | {edu.startYear} -{" "}
-                {edu.endYear || "Year"}
+              style={{ marginBottom: 10 }}>
+              <Text style={styles.entryTitle}>
+                {project.name || "Project Name"}
               </Text>
+              <Text style={styles.text}>
+                {project.description || "Project description goes here."}
+              </Text>
+              {project.githubLink && (
+                <Link
+                  style={styles.link}
+                  src={project.githubLink}>
+                  <Text>GitHub</Text>
+                </Link>
+              )}
+              {project.liveLink && (
+                <Link
+                  style={styles.link}
+                  src={project.liveLink}>
+                  <Text>Live Demo</Text>
+                </Link>
+              )}
+            </View>
+          ))}
+        </View>
+
+        {/* Education Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            <Text style={{ color: "#FA1E4E" }}>Edu</Text>
+            <Text>cation</Text>
+          </Text>
+          {education.map((edu, index) => (
+            <View
+              key={index}
+              style={styles.educationEntry}>
+              {/* First line: Qualification and University with expected date */}
+              <View style={styles.educationRow}>
+                <Text style={styles.entryTitle}>
+                  {edu.qualification}, {edu.institute}
+                </Text>
+                <Text style={styles.entryDates}>
+                  {edu.endYear === "Present"
+                    ? `Expected ${edu.endYear}`
+                    : edu.startYear + " - " + edu.endYear}
+                </Text>
+              </View>
+
+              {/* Second line: Field of Study and Grade */}
+              <View style={styles.educationRow}>
+                <Text style={styles.entrySubtitle}>{edu.fieldOfStudy}</Text>
+                <Text style={styles.entrySubtitle}>Grade: {edu.grade}</Text>
+              </View>
             </View>
           ))}
         </View>

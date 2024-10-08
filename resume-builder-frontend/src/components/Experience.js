@@ -1,5 +1,13 @@
 import React from "react";
-import { FaBriefcase, FaPlus, FaTrash } from "react-icons/fa";
+import {
+  FaBriefcase,
+  FaPlus,
+  FaTrash,
+  FaBold,
+  FaItalic,
+  FaListUl,
+  FaListOl,
+} from "react-icons/fa";
 
 const Experience = ({ experiences, setExperiences }) => {
   // Remove an experience by index
@@ -30,6 +38,39 @@ const Experience = ({ experiences, setExperiences }) => {
     setExperiences(newExperiences);
   };
 
+  // Function to format the selected text
+  const formatText = (index, formatType) => {
+    const newExperiences = [...experiences];
+    const textarea = document.getElementById(`job-role-${index}`);
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+
+    let formattedText = selectedText;
+
+    if (formatType === "bullet") {
+      formattedText = `• ${selectedText}`;
+    } else if (formatType === "number") {
+      formattedText = `1. ${selectedText}`;
+    } else if (formatType === "bold") {
+      formattedText = `**${selectedText}**`; // Markdown style
+    } else if (formatType === "italic") {
+      formattedText = `*${selectedText}*`; // Markdown style
+    }
+
+    newExperiences[index].jobRole =
+      textarea.value.substring(0, start) +
+      formattedText +
+      textarea.value.substring(end);
+
+    setExperiences(newExperiences);
+    textarea.focus();
+    textarea.setSelectionRange(
+      start + formattedText.length,
+      start + formattedText.length
+    );
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-semibold text-purple-700 mb-4 flex items-center">
@@ -51,10 +92,10 @@ const Experience = ({ experiences, setExperiences }) => {
                 id={`company-${index}`}
                 className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
                 placeholder="Company Name"
-                value={exp.company} // Bind value to state
+                value={exp.company}
                 onChange={(e) =>
                   handleInputChange(index, "company", e.target.value)
-                } // Handle input change
+                }
               />
             </div>
             <div>
@@ -68,10 +109,10 @@ const Experience = ({ experiences, setExperiences }) => {
                 id={`designation-${index}`}
                 className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
                 placeholder="Your Job Title"
-                value={exp.designation} // Bind value to state
+                value={exp.designation}
                 onChange={(e) =>
                   handleInputChange(index, "designation", e.target.value)
-                } // Handle input change
+                }
               />
             </div>
             <div className="md:col-span-2">
@@ -80,16 +121,37 @@ const Experience = ({ experiences, setExperiences }) => {
                 className="block text-sm font-medium text-gray-700">
                 Job Role
               </label>
+              <div className="flex space-x-2 mb-2">
+                <button
+                  onClick={() => formatText(index, "bullet")}
+                  className="inline-flex items-center px-2 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-purple-700 hover:bg-purple-500">
+                  <FaListUl />
+                </button>
+                <button
+                  onClick={() => formatText(index, "number")}
+                  className="inline-flex items-center px-2 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-purple-700 hover:bg-purple-500">
+                  <FaListOl />
+                </button>
+                <button
+                  onClick={() => formatText(index, "bold")}
+                  className="inline-flex items-center px-2 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-purple-700 hover:bg-purple-500">
+                  <FaBold />
+                </button>
+                <button
+                  onClick={() => formatText(index, "italic")}
+                  className="inline-flex items-center px-2 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-purple-700 hover:bg-purple-500">
+                  <FaItalic />
+                </button>
+              </div>
               <textarea
                 id={`job-role-${index}`}
                 rows="3"
                 className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
                 placeholder="Describe your job role"
-                value={exp.jobRole} // Bind value to state
+                value={exp.jobRole}
                 onChange={(e) =>
                   handleInputChange(index, "jobRole", e.target.value)
-                } // Handle input change
-              ></textarea>
+                }></textarea>
             </div>
             <div>
               <label
@@ -101,10 +163,10 @@ const Experience = ({ experiences, setExperiences }) => {
                 type="date"
                 id={`start-date-${index}`}
                 className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
-                value={exp.startDate} // Bind value to state
+                value={exp.startDate}
                 onChange={(e) =>
                   handleInputChange(index, "startDate", e.target.value)
-                } // Handle input change
+                }
               />
             </div>
             <div>
@@ -117,11 +179,11 @@ const Experience = ({ experiences, setExperiences }) => {
                 type="date"
                 id={`end-date-${index}`}
                 className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:bg-white px-3 py-2"
-                value={exp.endDate} // Bind value to state
-                disabled={exp.currentlyWorking} // Disable if currently working
+                value={exp.endDate}
+                disabled={exp.currentlyWorking}
                 onChange={(e) =>
                   handleInputChange(index, "endDate", e.target.value)
-                } // Handle input change
+                }
               />
             </div>
             <div className="flex items-center">
@@ -129,10 +191,10 @@ const Experience = ({ experiences, setExperiences }) => {
                 id={`currently-working-${index}`}
                 type="checkbox"
                 className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
-                checked={exp.currentlyWorking} // Bind value to state
+                checked={exp.currentlyWorking}
                 onChange={(e) =>
                   handleInputChange(index, "currentlyWorking", e.target.checked)
-                } // Handle checkbox change
+                }
               />
               <label
                 htmlFor={`currently-working-${index}`}

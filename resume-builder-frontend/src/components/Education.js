@@ -5,7 +5,7 @@ const Education = ({
   educations,
   addEducation,
   removeEducation,
-  setEducations, // Updated prop name
+  setEducations,
 }) => {
   const handleInputChange = (index, field, value) => {
     const updatedEducations = [...educations];
@@ -40,6 +40,53 @@ const Education = ({
                 }
               />
             </div>
+
+            {/* Qualification Dropdown */}
+            <div>
+              <label
+                htmlFor={`qualification-${index}`}
+                className="block text-sm font-medium text-gray-700">
+                Qualification
+              </label>
+              <select
+                id={`qualification-${index}`}
+                className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none px-3 py-2"
+                value={edu.qualification}
+                onChange={(e) =>
+                  handleInputChange(index, "qualification", e.target.value)
+                }>
+                <option value="">Select Qualification</option>
+                <option value="Bachelors">Bachelors</option>
+                <option value="Masters">Masters</option>
+                <option value="MS">MS</option>
+                <option value="MSc">MSc</option>
+                <option value="PhD">PhD</option>
+                <option value="B.Tech">B.Tech</option>
+                <option value="Secondary School">Secondary School</option>
+                <option value="Heigher School">Heigher School</option>
+                <option value="BSc">BSc</option>
+                <option value="MBBS">MBBS</option>
+              </select>
+            </div>
+            {/* Field of Study */}
+            <div>
+              <label
+                htmlFor={`fieldOfStudy-${index}`}
+                className="block text-sm font-medium text-gray-700">
+                Field Of Study
+              </label>
+              <input
+                type="text"
+                id={`fieldOfStudy-${index}`}
+                className="mt-1 block w-full rounded-md bg-white border border-gray-400 text-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 focus:outline-none px-3 py-2"
+                placeholder="Field of Study"
+                value={edu.fieldOfStudy}
+                onChange={(e) =>
+                  handleInputChange(index, "fieldOfStudy", e.target.value)
+                }
+              />
+            </div>
+
             <div>
               <label
                 htmlFor={`grade-${index}`}
@@ -92,6 +139,7 @@ const Education = ({
               />
             </div>
           </div>
+
           {index > 0 && (
             <button
               type="button"

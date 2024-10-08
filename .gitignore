@@ -1,2 +1,5 @@
 resume-builder-backend/node_modules
 resume-builder-frontend/node_modules
+
+resume-builder-backend/.env
+resume-builder-frontend/.env

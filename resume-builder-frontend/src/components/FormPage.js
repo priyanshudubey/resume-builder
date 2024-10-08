@@ -8,6 +8,7 @@ import Skills from "./Skills";
 import { FaChevronLeft, FaChevronRight, FaSignOutAlt } from "react-icons/fa";
 import ResumePDF from "./ResumePDF";
 import { PDFViewer } from "@react-pdf/renderer";
+import Certification from "./Certification";
 
 function FormPage() {
   const navigate = useNavigate();
@@ -18,12 +19,26 @@ function FormPage() {
 
   //    States for each section
   const [educations, setEducations] = useState([
-    { institute: "", grade: "", startYear: "", endYear: "" },
+    {
+      institute: "",
+      grade: "",
+      startYear: "",
+      endYear: "",
+      fieldOfStudy: "",
+      qualification: "",
+    },
   ]);
   const addEducation = () => {
     setEducations([
       ...educations,
-      { institute: "", startYear: "", endYear: "", grade: "" },
+      {
+        institute: "",
+        grade: "",
+        startYear: "",
+        endYear: "",
+        fieldOfStudy: "",
+        qualification: "",
+      },
     ]);
   };
   const removeEducation = (index) => {
@@ -54,7 +69,14 @@ function FormPage() {
     { name: "", description: "", githubLink: "", liveLink: "" },
   ]);
 
-  const tabs = ["personal", "education", "experience", "projects", "skills"];
+  const tabs = [
+    "personal",
+    "education",
+    "experience",
+    "projects",
+    "skills",
+    "certifications",
+  ];
   const [skills, setSkills] = useState("");
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -106,6 +128,8 @@ function FormPage() {
         startYear: edu.startYear,
         endYear: edu.endYear,
         grade: edu.grade,
+        fieldOfStudy: edu.fieldOfStudy, // New field
+        qualification: edu.qualification, // New field
       })),
       projects: projects.map((proj) => ({
         name: proj.name,
@@ -188,6 +212,7 @@ function FormPage() {
                 removeEducation={removeEducation}
               />
             )}
+            {/* {activeTab === "certifications" && <Certification />} */}
             {activeTab === "experience" && (
               <Experience
                 experiences={experiences}
@@ -231,22 +256,23 @@ function FormPage() {
           </button>
         )}
       </div>
-      {console.log("Printing resume Data: ", resumeData)}
+      {/* {console.log("Printing resume Data: ", resumeData)} */}
       {showPDF ? (
         resumeData ? (
           <>
-            <p>Attempting to display PDF Viewer</p>
+            {/* <p>Attempting to display PDF Viewer</p> */}
             <PDFViewer
               width="100%"
-              height="600">
+              height="600"
+              className="border border-x-8 border-y-8 border-purple-500 rounded-md p-4">
               <ResumePDF resumeData={resumeData} />
             </PDFViewer>
           </>
         ) : (
-          <p>Resume data is not available yet</p>
+          <p></p>
         )
       ) : (
-        <p>PDF Viewer is not shown yet</p>
+        <p></p>
       )}
       <>
         <footer className="bg-purple-800 text-white py-8 mt-16">
